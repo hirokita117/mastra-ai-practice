@@ -1,3 +1,5 @@
+# インストールしたとき
+```sh
 Need to install the following packages:
   create-mastra@0.10.15
 Ok to proceed? (y) y
@@ -59,3 +61,9 @@ found 0 vulnerabilities
 
     cd my-mastra-app
     npm run dev
+```
+
+# ローカルで立ち上げで必要だったこと
+
+`npx create-mastra@latest` だけではダメで、 node のバージョンを 22 以上にする必要があった。
+node のバージョンを切り替えた後、 `my-mastra-app/node_modules/` をディレクトリごと削除した。
