@@ -5,6 +5,7 @@ import { prQuizWorkflow } from '../workflows/pr-quiz-workflow';
 export const prQuizMcpServer = new MCPServer({
   name: 'pr-quiz-mcp-server',
   version: '1.0.0',
+  tools: {},
   workflows: { prQuizWorkflow },
 });
 
