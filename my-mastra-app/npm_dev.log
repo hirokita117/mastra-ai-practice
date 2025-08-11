@@ -1,0 +1,9 @@
+
+> my-mastra-app@1.0.0 dev
+> mastra dev
+
+[32mINFO[39m [2025-08-11 08:29:33.222 +0000] (Mastra CLI): [36mStarting watcher...[39m
+[32mINFO[39m [2025-08-11 08:29:34.318 +0000] (Mastra CLI): [36mBundling finished, starting server...[39m
+[32mINFO[39m [2025-08-11 08:29:34.353 +0000] (Mastra CLI): [36m[Mastra Dev] - Starting server...[39m
+[32mINFO[39m [2025-08-11 08:29:35.448 +0000] (Mastra): [36m Mastra API running on port http://localhost:4111/api[39m
+[32mINFO[39m [2025-08-11 08:29:35.452 +0000] (Mastra): [36m👨‍💻 Playground available at http://localhost:4111[39m

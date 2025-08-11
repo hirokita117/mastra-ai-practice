@@ -24,7 +24,11 @@ export const weatherAgent = new Agent({
   tools: { weatherTool },
   memory: new Memory({
     storage: new LibSQLStore({
-      url: 'file:../mastra.db', // path is relative to the .mastra/output directory
+      // SECURITY-NOTE: Storing sensitive conversation data in a local file is a security risk.
+      // An attacker with file system access could read, modify, or delete the database.
+      // For production, use a secure, managed database and provide the connection
+      // string via an environment variable (e.g., process.env.DATABASE_URL).
+      url: process.env.DATABASE_URL || 'file:../mastra.db', // Fallback for local dev only
     }),
   }),
 });
