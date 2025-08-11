@@ -1,28 +1,6 @@
 import { createStep, createWorkflow } from '@mastra/core/workflows';
 import { z } from 'zod';
 
-// Zod schema for geocoding API response
-const GeocodingResponseSchema = z.object({
-  results: z.array(z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-    name: z.string(),
-  })).optional(),
-});
-
-// Zod schema for weather API response
-const WeatherResponseSchema = z.object({
-  current: z.object({
-    time: z.string(),
-    precipitation: z.number(),
-    weathercode: z.number(),
-  }),
-  hourly: z.object({
-    precipitation_probability: z.array(z.number()),
-    temperature_2m: z.array(z.number()),
-  }),
-});
-
 const forecastSchema = z.object({
   date: z.string(),
   maxTemp: z.number(),
@@ -58,7 +36,7 @@ const fetchWeather = createStep({
   id: 'fetch-weather',
   description: 'Fetches weather forecast for a given city',
   inputSchema: z.object({
-    city: z.string().min(1).max(100).describe('The city to get the weather for'),
+    city: z.string().describe('The city to get the weather for'),
   }),
   outputSchema: forecastSchema,
   execute: async ({ inputData }) => {
@@ -68,8 +46,9 @@ const fetchWeather = createStep({
 
     const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(inputData.city)}&count=1`;
     const geocodingResponse = await fetch(geocodingUrl);
-    const geocodingJson = await geocodingResponse.json();
-    const geocodingData = GeocodingResponseSchema.parse(geocodingJson);
+    const geocodingData = (await geocodingResponse.json()) as {
+      results: { latitude: number; longitude: number; name: string }[];
+    };
 
     if (!geocodingData.results?.[0]) {
       throw new Error(`Location '${inputData.city}' not found`);
@@ -79,8 +58,17 @@ const fetchWeather = createStep({
 
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=precipitation,weathercode&timezone=auto,&hourly=precipitation_probability,temperature_2m`;
     const response = await fetch(weatherUrl);
-    const weatherJson = await response.json();
-    const data = WeatherResponseSchema.parse(weatherJson);
+    const data = (await response.json()) as {
+      current: {
+        time: string;
+        precipitation: number;
+        weathercode: number;
+      };
+      hourly: {
+        precipitation_probability: number[];
+        temperature_2m: number[];
+      };
+    };
 
     const forecast = {
       date: new Date().toISOString(),
