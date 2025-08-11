@@ -1,33 +1,30 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 
-// Zod schema for geocoding API response
-const GeocodingResponseSchema = z.object({
-  results: z.array(z.object({
-    latitude: z.number(),
-    longitude: z.number(),
-    name: z.string(),
-  })).optional(),
-});
-
-// Zod schema for weather API response
-const WeatherResponseSchema = z.object({
-  current: z.object({
-    time: z.string(),
-    temperature_2m: z.number(),
-    apparent_temperature: z.number(),
-    relative_humidity_2m: z.number(),
-    wind_speed_10m: z.number(),
-    wind_gusts_10m: z.number(),
-    weather_code: z.number(),
-  }),
-});
+interface GeocodingResponse {
+  results: {
+    latitude: number;
+    longitude: number;
+    name: string;
+  }[];
+}
+interface WeatherResponse {
+  current: {
+    time: string;
+    temperature_2m: number;
+    apparent_temperature: number;
+    relative_humidity_2m: number;
+    wind_speed_10m: number;
+    wind_gusts_10m: number;
+    weather_code: number;
+  };
+}
 
 export const weatherTool = createTool({
   id: 'get-weather',
   description: 'Get current weather for a location',
   inputSchema: z.object({
-    location: z.string().min(1).max(100).describe('City name'),
+    location: z.string().describe('City name'),
   }),
   outputSchema: z.object({
     temperature: z.number(),
@@ -46,8 +43,7 @@ export const weatherTool = createTool({
 const getWeather = async (location: string) => {
   const geocodingUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(location)}&count=1`;
   const geocodingResponse = await fetch(geocodingUrl);
-  const geocodingJson = await geocodingResponse.json();
-  const geocodingData = GeocodingResponseSchema.parse(geocodingJson);
+  const geocodingData = (await geocodingResponse.json()) as GeocodingResponse;
 
   if (!geocodingData.results?.[0]) {
     throw new Error(`Location '${location}' not found`);
@@ -58,8 +54,7 @@ const getWeather = async (location: string) => {
   const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,wind_speed_10m,wind_gusts_10m,weather_code`;
 
   const response = await fetch(weatherUrl);
-  const weatherJson = await response.json();
-  const data = WeatherResponseSchema.parse(weatherJson);
+  const data = (await response.json()) as WeatherResponse;
 
   return {
     temperature: data.current.temperature_2m,
