@@ -14,11 +14,14 @@ Rules:
 - Identify the most important changes (APIs, behaviors, edge cases, security implications, tests).
 - Generate a concise quiz set:
   - 5 multiple-choice questions (4 options each) with exactly one correct answer.
-  - 3 short-answer questions.
-  - 1 reflection question (open-ended) on design trade-offs.
+  - 3 short-answer questions with expected answers.
+  - 1 reflection question (open-ended) on design trade-offs with an expected answer.
+- ALL output must be in Japanese language.
 - For each MCQ include: question, options, correctOptionIndex, briefRationale.
+- For each short-answer question include: question, expectedAnswer.
+- For the reflection question include: question, expectedAnswer (discussing pros/cons and trade-offs).
 - Keep questions self-contained and reference relevant filenames where helpful.
-- Prefer language of the user prompt (Japanese if the user speaks Japanese).`,
+- Expected answers should be comprehensive but concise, providing clear guidance on what constitutes a good response.`,
   model: google('gemini-2.5-flash-lite'),
   tools: {
     'github-pr-diff': githubPrDiffTool,
