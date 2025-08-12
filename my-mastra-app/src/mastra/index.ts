@@ -6,10 +6,12 @@ import { weatherWorkflow } from './workflows/weather-workflow';
 import { weatherAgent } from './agents/weather-agent';
 import { prQuizWorkflow } from './workflows/pr-quiz-workflow';
 import { prQuizAgent } from './agents/pr-quiz-agent';
+import { prQuizWorkflowLocal } from './workflows/pr-quiz-workflow-local';
+import { prQuizAgentLocal } from './agents/pr-quiz-agent-local';
 
 export const mastra = new Mastra({
-  workflows: { weatherWorkflow, prQuizWorkflow },
-  agents: { weatherAgent, prQuizAgent },
+  workflows: { weatherWorkflow, prQuizWorkflow, prQuizWorkflowLocal },
+  agents: { weatherAgent, prQuizAgent, prQuizAgentLocal },
   storage: new LibSQLStore({
     // stores telemetry, evals, ... into memory storage, if it needs to persist, change to file:../mastra.db
     url: ":memory:",
