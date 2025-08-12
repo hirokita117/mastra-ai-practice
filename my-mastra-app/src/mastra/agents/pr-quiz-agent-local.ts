@@ -22,7 +22,7 @@ Rules:
 - For the reflection question include: question, expectedAnswer (discussing pros/cons and trade-offs).
 - Keep questions self-contained and reference relevant filenames where helpful.
 - Expected answers should be comprehensive but concise, providing clear guidance on what constitutes a good response.`,
-  model: ollama('gpt-oss:20b'), // Ollamaでllama3.1:8bモデルを使用
+  model: ollama('llama3:8b'),
   tools: {
     'github-pr-diff': githubPrDiffTool,
   },
