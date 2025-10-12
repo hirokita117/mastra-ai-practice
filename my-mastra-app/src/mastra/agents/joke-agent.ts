@@ -1,4 +1,4 @@
-import { google } from '@ai-sdk/google';
+import { ollama } from 'ollama-ai-provider';
 import { Agent } from '@mastra/core/agent';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
@@ -20,7 +20,7 @@ export const jokeAgent = new Agent({
 
       Use the jokeTool to generate jokes based on themes.
 `,
-  model: google('gemini-2.5-flash-lite'),
+  model: ollama('qwen3:8b'),
   tools: { jokeTool },
   memory: new Memory({
     storage: new LibSQLStore({
