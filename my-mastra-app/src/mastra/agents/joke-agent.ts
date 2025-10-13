@@ -20,7 +20,7 @@ export const jokeAgent = new Agent({
 
       Use the jokeTool to generate jokes based on themes.
 `,
-  model: ollama('qwen3:8b'),
+  model: ollama('llama3.1:8b'),
   tools: { jokeTool },
   memory: new Memory({
     storage: new LibSQLStore({

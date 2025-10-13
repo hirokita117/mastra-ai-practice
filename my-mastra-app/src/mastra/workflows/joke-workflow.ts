@@ -38,12 +38,15 @@ const generateJoke = createStep({
     - 簡潔で面白いものにしてください
     - 攻撃的でない内容にしてください`;
 
-    const response = await agent.stream([
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ]);
+    const response = await agent.stream(
+      [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      { toolChoice: 'none' },
+    );
 
     let jokeText = '';
 
@@ -92,12 +95,15 @@ const evaluateJoke = createStep({
 
     スコアが7点未満の場合は改善が必要とみなします。`;
 
-    const response = await agent.stream([
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ]);
+    const response = await agent.stream(
+      [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      { toolChoice: 'none' },
+    );
 
     let evaluationText = '';
 
@@ -132,13 +138,15 @@ const improveJoke = createStep({
       throw new Error('Evaluation data not found');
     }
 
-    // スコアが7以上ならそのまま返す
+    // 一旦必ず改善するようにしておく
+    /*
     if (evaluation.score >= 7) {
       return {
         finalJoke: evaluation.joke,
         improved: false,
       };
     }
+    */
 
     // スコアが7未満なら改善
     const agent = mastra?.getAgent('jokeAgent');
@@ -161,12 +169,15 @@ const improveJoke = createStep({
 
     改善されたジョークを1つ生成してください。`;
 
-    const response = await agent.stream([
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ]);
+    const response = await agent.stream(
+      [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      { toolChoice: 'none' },
+    );
 
     let improvedJokeText = '';
 
